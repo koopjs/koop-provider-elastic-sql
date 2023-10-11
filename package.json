@@ -6,7 +6,6 @@
   "scripts": {
     "test": "jest",
     "test:cov": "jest --coverage",
-    "postpublish": "gh-release",
     "lint": "eslint \"**/*.js\"",
     "lint:ci": "eslint \"**/*.js\" --rule linebreak-style:0 ",
     "lint:fix": "eslint \"**/*.js\" --fix"
