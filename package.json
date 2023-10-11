@@ -1,7 +1,7 @@
 {
   "name": "@koopjs/provider-elastic-sql",
   "version": "1.0.1",
-  "description": "Experimental provider for elastic/opensearch",
+  "description": "Koop provider for Elastic SQL API",
   "main": "index.js",
   "scripts": {
     "test": "jest",
