@@ -57,13 +57,13 @@ If you omit the `geometryFieldMap`, the GeoJSON produced by the provider will no
 Once registered with Koop, the provide will expose routes with an `id` parameter. For example:
 
 ```sh
-/elastic/rest/services/:id/FeatureServer
+/elastic-sql/rest/services/:id/FeatureServer
 ```
 
 The `id` parameter should be filled with the name of the Elastic index you are targeting.  So if you wished to query the `fires` document-index on you Elastic instance, you would make a request to:
 
 ```sh
-/elastic/rest/services/fires/FeatureServer/0/query
+/elastic-sql/rest/services/fires/FeatureServer/0/query
 ```
 
 
