@@ -22,7 +22,7 @@ module.exports = {
     'no-unused-vars': ['error', { ignoreRestSiblings: true }],
     indent: ['error', 2, { SwitchCase: 1 }],
     'linebreak-style': ['error', 'unix'],
-    quotes: ['error', 'single'],
+    //quotes: ['error', 'single'],
     semi: ['error', 'always'],
     'no-only-tests/no-only-tests': 'error',
   },

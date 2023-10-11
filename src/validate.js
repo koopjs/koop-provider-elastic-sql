@@ -8,9 +8,13 @@ const geometryFieldMapSchema = joi.object().required();
 
 function validateConn(conn) {
   const { error } = connSchema.validate(conn);
+  if (error?.message === '"value" is required') {
+    throw new Error('client connection configuration object is required');
+  }
+
   if (error) {
     throw new Error(
-      `invalid client connection config, ${error.details[0].message}`,
+      `invalid "conn", ${error.details[0].message.replace('"value" ', '')}`,
     );
   }
 }
@@ -18,20 +22,14 @@ function validateConn(conn) {
 function validateIdFieldMap(idFieldMap) {
   const { error } = idFieldMapSchema.validate(idFieldMap);
   if (error) {
-    if (error.message === '"value" must be of type object') {
-      throw new Error('invalid "idFieldMap", must be a key/value object');
-    }
-    throw new Error(`invalid "idFieldMap", ${error.details[0].message}`);
+    throw new Error(`invalid "idFieldMap", ${error.details[0].message.replace('"value" ', '')}`);
   }
 }
 
 function validateGeometryFieldMap(geometryFieldMap) {
   const { error } = geometryFieldMapSchema.validate(geometryFieldMap);
   if (error) {
-    if (error.message === '"value" must be of type object') {
-      throw new Error('invalid "geometryFieldMap", must be a key/value object');
-    }
-    throw new Error(`invalid "geometryFieldMap", ${error.details[0].message}`);
+    throw new Error(`invalid "geometryFieldMap", ${error.details[0].message.replace('"value" ', '')}`);
   }
 }
 

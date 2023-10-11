@@ -20,7 +20,7 @@ class Model {
   #geometryFieldMap;
   #idFieldMap;
 
-  constructor({ logger }, { conn, geometryFieldMap, idFieldMap }) {
+  constructor({ logger }, { conn, geometryFieldMap, idFieldMap } = {}) {
     this.#logger = logger;
 
     // Validate registration options
@@ -85,6 +85,7 @@ class Model {
       geojson.metadata = { idField };
 
       geojson.filtersApplied = generateFiltersApplied({
+        ...geoserviceParams,
         idField,
         geometryField,
         geometry,
@@ -99,15 +100,14 @@ class Model {
 
   #handleError(error) {
     const messagePrefix = 'Provider error:';
-    const statusCode = error?.body?.status || 500;
 
     if (error.name === 'ResponseError') {
       this.#logger.error(
         `${messagePrefix} data-store query failure, ${error.message}`,
       );
-      const message = statusCode === 400 ? 'invalid input' : error.message;
+      const message = error?.body?.status === 400 ? 'invalid input' : error.message;
       const err = new Error(message);
-      err.code = statusCode;
+      err.code = error?.body?.status || 500;
       return err;
     }
 
@@ -171,7 +171,7 @@ function buildGeoshapeFilter({ geometryField, geometry, inSR, spatialRel }) {
   const { geometry: geometryFilter, relation } = standardizeGeometryFilter({
     geometry,
     inSR,
-    reprojecitonSR: 4326,
+    reprojectionSR: 4326,
     spatialRel,
   });
 
@@ -213,17 +213,22 @@ function convertRowToFeature(featureAttributeKeys, geometryField, row) {
   };
 }
 
-function generateFiltersApplied({ idField, geometry }) {
-  const filtersApplied = {
-    where: true,
-    orderByFields: true,
-  };
+function generateFiltersApplied({ where, objectIds, orderByFields, idField, geometry, geometryField }) {
+  const filtersApplied = {};
 
-  if (idField) {
+  if (where) {
+    filtersApplied.where = true;
+  }
+
+  if (objectIds && idField) {
     filtersApplied.objectIds = true;
   }
 
-  if (geometry) {
+  if (orderByFields) {
+    filtersApplied.orderByFields = true;
+  }
+
+  if (geometry && geometryField) {
     filtersApplied.geometry = true;
   }
 
